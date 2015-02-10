@@ -1,5 +1,9 @@
 package org.melonbrew.fe;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,20 +21,16 @@ import org.melonbrew.fe.database.databases.MySQLDB;
 import org.melonbrew.fe.database.databases.SQLiteDB;
 import org.melonbrew.fe.listeners.FePlayerListener;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
 public class Fe extends JavaPlugin {
     private final Set<Database> databases;
     private API api;
     private Database database;
 
     public Fe() {
-        databases = new HashSet<Database>();
+        databases = new HashSet<>();
     }
 
+    @Override
     public void onEnable() {
         getDataFolder().mkdirs();
 
@@ -95,6 +95,7 @@ public class Fe extends JavaPlugin {
         getLogger().info( message );
     }
 
+    @Override
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
 
@@ -114,7 +115,7 @@ public class Fe extends JavaPlugin {
     }
 
     public Set<Database> getDatabases() {
-        return new HashSet<Database>(databases);
+        return new HashSet<>(databases);
     }
 
     public API getAPI() {
@@ -177,6 +178,7 @@ public class Fe extends JavaPlugin {
         }
     }
 
+    @Override
     public void reloadConfig() {
         super.reloadConfig();
 
@@ -268,6 +270,7 @@ public class Fe extends JavaPlugin {
             Graph databaseGraph = metrics.createGraph("Database Engine");
 
             databaseGraph.addPlotter(new Plotter(getFeDatabase().getName()) {
+                @Override
                 public int getValue() {
                     return 1;
                 }
@@ -276,6 +279,7 @@ public class Fe extends JavaPlugin {
             Graph defaultHoldings = metrics.createGraph("Default Holdings");
 
             defaultHoldings.addPlotter(new Plotter(getAPI().getDefaultHoldings() + "") {
+                @Override
                 public int getValue() {
                     return 1;
                 }
@@ -290,6 +294,7 @@ public class Fe extends JavaPlugin {
             }
 
             maxHoldings.addPlotter(new Plotter(maxHolding) {
+                @Override
                 public int getValue() {
                     return 1;
                 }

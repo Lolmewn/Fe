@@ -57,6 +57,7 @@ public class MongoDB extends Database {
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public HashMap<String, String> loadAccountData(String name, String uuid) {
         DBObject userObject = getDatabase().getCollection(ACCOUNTS_COLLECTION).findOne(new BasicDBObject(uuid != null ? "uuid" : "name", uuid != null ? uuid : name));
 
@@ -64,7 +65,7 @@ public class MongoDB extends Database {
             return null;
         }
 
-        HashMap<String, String> data = new HashMap<String, String>();
+        HashMap<String, String> data = new HashMap<>();
 
         data.put( "money", ((BasicDBObject) userObject).getString( "money" ) );
         data.put( "name", ((BasicDBObject) userObject).getString( "name" ) );
@@ -72,6 +73,7 @@ public class MongoDB extends Database {
         return data;
     }
 
+    @Override
     public void removeAccount(String name, String uuid) {
         super.removeAccount(name, uuid);
 
@@ -85,6 +87,7 @@ public class MongoDB extends Database {
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public void saveAccount(String name, String uuid, double money) {
         DBCollection collection = getDatabase().getCollection(ACCOUNTS_COLLECTION);
 
@@ -135,7 +138,7 @@ public class MongoDB extends Database {
     public List<Account> loadTopAccounts(int size) {
         DBCursor cursor = getDatabase().getCollection(ACCOUNTS_COLLECTION).find().sort(new BasicDBObject("money", -1)).limit(size);
 
-        List<Account> topAccounts = new ArrayList<Account>();
+        List<Account> topAccounts = new ArrayList<>();
 
         for (DBObject aCursor : cursor) {
             BasicDBObject topAccountObject = (BasicDBObject) aCursor;
@@ -154,7 +157,7 @@ public class MongoDB extends Database {
     public List<Account> getAccounts() {
         DBCursor cursor = getDatabase().getCollection(ACCOUNTS_COLLECTION).find().sort(new BasicDBObject("money", -1));
 
-        List<Account> accounts = new ArrayList<Account>();
+        List<Account> accounts = new ArrayList<>();
 
         for (DBObject aCursor : cursor) {
             BasicDBObject accountObject = (BasicDBObject) aCursor;
@@ -169,6 +172,7 @@ public class MongoDB extends Database {
         return accounts;
     }
 
+    @Override
     public void clean() {
         DBCursor cursor = getDatabase().getCollection(ACCOUNTS_COLLECTION).find((new BasicDBObject("money", plugin.getAPI().getDefaultHoldings())));
 
