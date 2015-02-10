@@ -86,6 +86,7 @@ public abstract class SQLDB extends Database {
     @Override
     public boolean init() {
         super.init();
+        checkConnection();
         try {
             this.setupTables();
         } catch (SQLException ex) {
